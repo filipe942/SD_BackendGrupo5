@@ -10,9 +10,12 @@ t.router({
 const app = express();
 const PORT = 3000;
 app.use(cors({ origin: "http://localhost:5173" }));
-
+console.log("asdasdsdssd");
+app.get("/as", (req, res) => {
+  res.send("Hello Worsdld!");
+});
 app.listen(PORT, () => {
-  console.log("Server started on port " + PORT + "...");
+  console.log("Server started on port " + PORT + ".s.asd.");
 });
 
 

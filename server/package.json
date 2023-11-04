@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc && node dist/index.js"
+    "dev": "npx vite-node ./src/index.ts"
   },
   "keywords": [],
   "author": "",
