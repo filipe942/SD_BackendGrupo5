@@ -27,7 +27,7 @@ const ViewEvents = () => {
 
   const getData = async () => {
     const result = await client.GetEventList.query();
-    console.log(result);
+    //console.log(result);
     setEvents(result as Event[]);
   };
 

@@ -1,7 +1,4 @@
-import React, {useState} from "react";
-import "../assets/css/Table.css";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useState } from "react";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import type { AppRouter } from "../../../server/src/trpc";
 
@@ -34,21 +31,19 @@ const EventsTable: React.FC<EventsTableProps> = ({ events, getData }) => {
     const result = await client.UpdateEvent.mutate(event);
     if (result.message === "success") {
       getData();
-    }
-    else {
+    } else {
       alert("Error updating event");
     }
-  }
+  };
 
   const deleteEvent = async (_id: string) => {
     const result = await client.DeleteEvent.mutate({ _id });
     if (result.message === "success") {
       getData();
-    }
-    else {
+    } else {
       alert("Error deleting event");
     }
-  }
+  };
 
   const handleEdit = (event: Event) => {
     setEditEventId(event._id);
@@ -63,8 +58,6 @@ const EventsTable: React.FC<EventsTableProps> = ({ events, getData }) => {
   const handleSave = () => {
     if (editedEvent) {
       updateEvent(editedEvent);
-      // You may want to pass the updatedEvents to a parent component
-      // to update the original state, or use a state management library like Redux.
       setEditEventId(null);
       setEditedEvent(null);
     }
@@ -82,14 +75,21 @@ const EventsTable: React.FC<EventsTableProps> = ({ events, getData }) => {
     }
   };
 
-  const handleDateChange = (date: Date | null, field: keyof Event) => {
-    if (editedEvent && date) {
+  const getDateString = (date: Date) => {
+    return date instanceof Date && !isNaN(date.getTime())
+      ? date.toISOString().split("T")[0]
+      : "";
+  };
+
+  const handleDateChange = (value: string, field: keyof Event) => {
+    if (editedEvent && field === 'date') {
       setEditedEvent({
         ...editedEvent,
-        [field]: date,
+        [field]: new Date(value),
       });
     }
   };
+
 
   const handleTimeChange = (time: string, field: keyof Event) => {
     if (editedEvent) {
@@ -101,7 +101,7 @@ const EventsTable: React.FC<EventsTableProps> = ({ events, getData }) => {
   };
 
   const handleDelete = (id: string) => {
-      deleteEvent(id);
+    deleteEvent(id);
   };
 
   return (
@@ -131,10 +131,10 @@ const EventsTable: React.FC<EventsTableProps> = ({ events, getData }) => {
             </td>
             <td>
               {editEventId === event._id && editedEvent ? (
-                <DatePicker
-                  selected={new Date(editedEvent.date)}
-                  onChange={(date) => handleDateChange(date, "date")}
-                  dateFormat="dd/MM/yyyy"
+                <input
+                  type="date"
+                  value={getDateString(editedEvent.date)}
+                  onChange={(e) => handleDateChange(e.target.value, "date")}
                 />
               ) : (
                 new Date(event.date).toLocaleDateString("en-GB", {
@@ -176,7 +176,9 @@ const EventsTable: React.FC<EventsTableProps> = ({ events, getData }) => {
               ) : (
                 <>
                   <button onClick={() => handleEdit(event)}>Edit</button>
-                  <button onClick={() => handleDelete(event._id)}>Delete</button>
+                  <button onClick={() => handleDelete(event._id)}>
+                    Delete
+                  </button>
                 </>
               )}
             </td>

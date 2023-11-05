@@ -1,7 +1,4 @@
 import { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "../assets/css/Form.css";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import type { AppRouter } from "../../../server/src/trpc";
 
@@ -27,24 +24,33 @@ const Form = () => {
     console.log(result);
   };
 
-  const handleChange = (event: { target: { name: any; value: any } }) => {
-    const name = event.target.name;
-    const value = event.target.value;
-
-    setInputs((values) => ({ ...values, [name]: value }));
+  const getDateString = (date: Date) => {
+    return date instanceof Date && !isNaN(date.getTime())
+      ? date.toISOString().split("T")[0]
+      : "";
   };
 
-  const handleDateChange = (date: Date | null, field: "date" | "time") => {
-    if (date) {
-      setInputs((values) => ({ ...values, [field]: date }));
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    if (name === "date") {
+      const dateValue = value ? new Date(value + "T00:00:00") : new Date();
+      setInputs((prevInputs) => ({ ...prevInputs, [name]: dateValue }));
+    } else {
+      setInputs((prevInputs) => ({ ...prevInputs, [name]: value }));
     }
   };
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
-    if (!inputs.local.trim() || !inputs.date || !inputs.time.trim() || !inputs.participants) {
-      alert('Please fill in all fields.');
+    if (
+      !inputs.local.trim() ||
+      !inputs.date ||
+      !inputs.time.trim() ||
+      !inputs.participants
+    ) {
+      alert("Please fill in all fields.");
       return;
     }
 
@@ -74,10 +80,12 @@ const Form = () => {
       </label>
       <label>
         Date <br />
-        <DatePicker
-          selected={inputs.date}
-          onChange={(date) => handleDateChange(date, "date")}
-          dateFormat="dd/MM/yyyy"
+        <input
+          type="date"
+          name="date"
+          value={getDateString(inputs.date)}
+          onChange={handleChange}
+          pattern="\d{4}-\d{2}-\d{2}"
         />
       </label>
       <label>
@@ -85,7 +93,7 @@ const Form = () => {
         <input
           type="time"
           name="time"
-          value={inputs.time}
+          value={inputs.time || ""}
           onChange={handleChange}
         />
       </label>
@@ -102,9 +110,9 @@ const Form = () => {
       <br />
       <input
         onClick={getData}
-        className="sweep-button"
         type="submit"
         value="Submit"
+        className="sweep-button"
       />
     </form>
   );
