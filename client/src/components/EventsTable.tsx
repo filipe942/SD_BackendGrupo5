@@ -158,7 +158,8 @@ const EventsTable: React.FC<EventsTableProps> = ({ events, getData }) => {
             <td>
               {editEventId === event._id ? (
                 <input
-                  type="text"
+                  type="number"
+                  min="1"
                   value={editedEvent?.participants || ""}
                   onChange={(e) => handleChange(e, "participants")}
                 />

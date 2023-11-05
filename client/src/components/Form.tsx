@@ -42,8 +42,22 @@ const Form = () => {
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
+
+    if (!inputs.local.trim() || !inputs.date || !inputs.time.trim() || !inputs.participants) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    //DEBUG
     alert(JSON.stringify(inputs));
-    console.log(inputs);
+
+    //Reset fields
+    setInputs({
+      local: "",
+      date: new Date(),
+      time: "",
+      participants: "",
+    });
   };
 
   return (
@@ -78,7 +92,8 @@ const Form = () => {
       <label>
         Number of Participants: <br />
         <input
-          type="text"
+          type="number"
+          min="1"
           name="participants"
           value={inputs.participants || ""}
           onChange={handleChange}
