@@ -1,7 +1,7 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 import { z } from "zod";
 const t = initTRPC.create();
-import { Events } from "../models/Events.ts";
+import { Events } from "./models/Events.js";
 
 export const appRouter = t.router({
   CreateEvent: t.procedure
@@ -14,7 +14,7 @@ export const appRouter = t.router({
       })
     )
     .mutation(async (req) => {
-      console.log(`Recebido : ${JSON.stringify(req.input)}`);
+      console.log(`Receido : ${JSON.stringify(req.input)}`);
       console.log(req.input.date);
       const event = new Events({
         local: req.input.local,

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 mongoose.set("strictQuery", false);
 import cors from "cors";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { appRouter } from "./trpc.ts";
+import { appRouter } from "./trpc.js";
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
@@ -51,5 +51,5 @@ app.use(cors({ origin: "http://localhost:5173" }));
 app.use("/trpc", createExpressMiddleware({ router: appRouter }));
 
 app.listen(PORT, () => {
-  console.log("Server started on port " + PORT + "...");
+  console.log("Server started on port " + PORT);
 });
