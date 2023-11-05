@@ -1,39 +1,57 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import "../assets/css/Table.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
+import type { AppRouter } from "../../../server/src/trpc";
 
 interface Event {
-  id: number;
+  _id: string;
   local: string;
   date: Date;
   time: string;
   participants: string;
 }
 
-const EventsTable: React.FC = () => {
-  const [events, setEvents] = useState<Event[]>([
-    {
-      id: 1,
-      local: "Local 1",
-      date: new Date("2023-10-21"),
-      time: "02:40",
-      participants: "2",
-    },
-    {
-      id: 2,
-      local: "Local 2",
-      date: new Date("2023-11-11"),
-      time: "13:40",
-      participants: "6",
-    },
-  ]);
+interface EventsTableProps {
+  events: Event[];
+  getData: () => void;
+}
 
-  const [editEventId, setEditEventId] = useState<number | null>(null);
+const EventsTable: React.FC<EventsTableProps> = ({ events, getData }) => {
+  const [editEventId, setEditEventId] = useState<string | null>(null);
   const [editedEvent, setEditedEvent] = useState<Event | null>(null);
 
+  const client = createTRPCProxyClient<AppRouter>({
+    links: [
+      httpBatchLink({
+        url: "http://localhost:3000/trpc",
+      }),
+    ],
+  });
+
+  const updateEvent = async (event: Event) => {
+    const result = await client.UpdateEvent.mutate(event);
+    if (result.message === "success") {
+      getData();
+    }
+    else {
+      alert("Error updating event");
+    }
+  }
+
+  const deleteEvent = async (_id: string) => {
+    const result = await client.DeleteEvent.mutate({ _id });
+    if (result.message === "success") {
+      getData();
+    }
+    else {
+      alert("Error deleting event");
+    }
+  }
+
   const handleEdit = (event: Event) => {
-    setEditEventId(event.id);
+    setEditEventId(event._id);
     setEditedEvent({ ...event });
   };
 
@@ -44,10 +62,9 @@ const EventsTable: React.FC = () => {
 
   const handleSave = () => {
     if (editedEvent) {
-      const updatedEvents = events.map((event) =>
-        event.id === editedEvent.id ? editedEvent : event
-      );
-      setEvents(updatedEvents);
+      updateEvent(editedEvent);
+      // You may want to pass the updatedEvents to a parent component
+      // to update the original state, or use a state management library like Redux.
       setEditEventId(null);
       setEditedEvent(null);
     }
@@ -83,13 +100,8 @@ const EventsTable: React.FC = () => {
     }
   };
 
-  const handleDelete = (id: number) => {
-    const updatedEvents = events.filter((event) => event.id !== id);
-    setEvents(updatedEvents);
-    if (editEventId === id) {
-      // If the deleted event is currently being edited, cancel the edit
-      handleCancel();
-    }
+  const handleDelete = (id: string) => {
+      deleteEvent(id);
   };
 
   return (
@@ -105,9 +117,9 @@ const EventsTable: React.FC = () => {
       </thead>
       <tbody>
         {events.map((event) => (
-          <tr key={event.id}>
+          <tr key={event._id}>
             <td>
-              {editEventId === event.id ? (
+              {editEventId === event._id ? (
                 <input
                   type="text"
                   value={editedEvent?.local || ""}
@@ -118,14 +130,14 @@ const EventsTable: React.FC = () => {
               )}
             </td>
             <td>
-              {editEventId === event.id ? (
+              {editEventId === event._id && editedEvent ? (
                 <DatePicker
-                  selected={editedEvent?.date}
+                  selected={new Date(editedEvent.date)}
                   onChange={(date) => handleDateChange(date, "date")}
                   dateFormat="dd/MM/yyyy"
                 />
               ) : (
-                event.date.toLocaleDateString("en-GB", {
+                new Date(event.date).toLocaleDateString("en-GB", {
                   day: "2-digit",
                   month: "2-digit",
                   year: "numeric",
@@ -133,7 +145,7 @@ const EventsTable: React.FC = () => {
               )}
             </td>
             <td>
-              {editEventId === event.id ? (
+              {editEventId === event._id ? (
                 <input
                   type="time"
                   value={editedEvent?.time || ""}
@@ -144,7 +156,7 @@ const EventsTable: React.FC = () => {
               )}
             </td>
             <td>
-              {editEventId === event.id ? (
+              {editEventId === event._id ? (
                 <input
                   type="text"
                   value={editedEvent?.participants || ""}
@@ -155,7 +167,7 @@ const EventsTable: React.FC = () => {
               )}
             </td>
             <td>
-              {editEventId === event.id ? (
+              {editEventId === event._id ? (
                 <>
                   <button onClick={handleSave}>Save</button>
                   <button onClick={handleCancel}>Cancel</button>
@@ -163,7 +175,7 @@ const EventsTable: React.FC = () => {
               ) : (
                 <>
                   <button onClick={() => handleEdit(event)}>Edit</button>
-                  <button onClick={() => handleDelete(event.id)}>Delete</button>
+                  <button onClick={() => handleDelete(event._id)}>Delete</button>
                 </>
               )}
             </td>
