@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "node  --watch --experimental-specifier-resolution=node --loader ts-node/esm ./src/index.ts"
+    "dev": "npx vite-node ./src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +19,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mongoose": "^8.0.0",
-    "ts-node": "^10.9.1",
+    "vite-node": "^0.34.6",
     "zod": "^3.22.4"
   },
   "devDependencies": {
