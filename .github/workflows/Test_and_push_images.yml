@@ -1,0 +1,76 @@
+name: Test and push images
+
+on:
+  push:
+    branches:
+      - "master"
+    paths:
+      - "client/**"
+      - "server/**"
+
+jobs:
+  test_ubuntu_client:
+    name: Test on Ubuntu latest Node.js
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use latest Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '*'
+      - name: npm install, build, and test
+        run: |
+          cd client
+          npm install
+          npm run build --if-present
+          npm test
+
+  test_windows_client:
+    name: Test on Windows latest Node.js
+    runs-on: windows-latest
+    needs: test_ubuntu_client
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use latest Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '*'
+      - name: npm install, build, and test
+        run: |
+          cd client
+          npm install
+          npm run build --if-present
+          npm test
+
+  test_ubuntu_server:
+    name: Test on Ubuntu latest Node.js
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use latest Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '*'
+      - name: npm install, build, and test
+        run: |
+          cd server
+          npm install
+          npm run build --if-present
+          npm test
+
+  test_windows_server:
+    name: Test on Windows latest Node.js
+    runs-on: windows-latest
+    needs: test_ubuntu_server
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use latest Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '*'
+      - name: npm install, build, and test
+        run: |
+          cd server
+          npm install
+          npm run build --if-present
+          npm test
