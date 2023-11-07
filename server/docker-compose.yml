@@ -1,7 +1,7 @@
-version: '3.9'
+version: "3.9"
 
 services:
-#Os servicos do mongoDB
+  #Os servicos do mongoDB
   mongo_db:
     container_name: mongo_db_container
     image: mongo:latest
@@ -11,12 +11,12 @@ services:
     volumes:
       - mongo_db:/data/db
 
-#Os servicos do node
+  #Os servicos do node
   api:
     build: .
     ports:
-      - 4000:3000
-    environment: 
+      - 3000:3000
+    environment:
       PORT: 3000
       MONGODB_URI: mongodb://mongo_db:27017
       DB_NAME: my_db
@@ -26,13 +26,3 @@ services:
 
 volumes:
   mongo_db: {}
-
-
-
-
-
-
-
-
-
-
