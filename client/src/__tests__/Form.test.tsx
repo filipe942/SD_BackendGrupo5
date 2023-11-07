@@ -2,8 +2,6 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import Form from "../components/Form";
 import "@testing-library/jest-dom";
 
-/* asdasd */
-
 describe("Form component", () => {
   beforeAll(() => {
     window.alert = () => {};
