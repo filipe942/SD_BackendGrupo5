@@ -37,7 +37,7 @@ export const appRouter = t.router({
   }),
 
   UpdateEvent: t.procedure.input(z.object({
-    _id: z.instanceof(Object).transform((id) => id.toString()),
+    _id: z.string(),
     local: z.string(),
     date: z.coerce.date(),
     time: z.string(),
@@ -62,7 +62,7 @@ export const appRouter = t.router({
   }),
 
   DeleteEvent: t.procedure.input(z.object({
-    _id: z.instanceof(Object).transform((id) => id.toString()),
+    _id: z.string(),
   })).mutation(async (req) => {
     console.log(`Recebido : ${JSON.stringify(req.input)}`);
     try {
