@@ -3,7 +3,7 @@ name: Test and push images
 on:
   push:
     branches:
-      - "master"
+      - "main"
     paths:
       - "client/**"
       - "server/**"
