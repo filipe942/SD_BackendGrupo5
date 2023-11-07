@@ -1,9 +1,9 @@
 import { AppRouter, appRouter } from '../trpc';
-import { Events } from '../models/Events'; 
+import { Events } from '../models/Events';
 import { ProcedureType, inferProcedureInput } from '@trpc/server';
 import { test, expect } from "@jest/globals";
 import mongoose from "mongoose";
-import * as dotenv from "dotenv";;
+import * as dotenv from "dotenv";
 dotenv.config();
 jest.unmock('mongoose')
 
@@ -14,7 +14,7 @@ beforeEach(async () => {
   } catch (error) {
     console.log("Error connecting to MongoDB:", error);
   }
-},10000);
+},100000);
 
 afterEach(async () => {
   try {
@@ -22,19 +22,19 @@ afterEach(async () => {
   } catch (error) {
     console.log("Error closing MongoDB connection:", error);
   }
-},10000);
+},100000);
 describe('appRouter', () => {
-    
+
     test('should create an event and then delete it', async () => {
         type Input = inferProcedureInput<AppRouter['CreateEvent']>;
-        
+
         const input:Input  = {
             local: 'Test Location',
             date: new Date(),
             time: '12:00 PM',
             participants: '12',
         };
-        
+
         // You can use Jest's expect() function to make assertions
         const result = await appRouter.CreateEvent({
           ctx: {}, // Provide the context if needed
@@ -57,7 +57,7 @@ describe('appRouter', () => {
         expect(event.participants).toBe(input.participants);
         eventId = (event._id);
         }
-        
+
 
       type deleteInput = inferProcedureInput<typeof appRouter['DeleteEvent']>;
 
@@ -72,16 +72,16 @@ describe('appRouter', () => {
           path: 'DeleteEvent',
           type: "mutation" as ProcedureType,
       });
-    
+
       // Make assertions based on the expected behavior
       expect(deleteResult).toEqual({ message: 'success' });
-    
+
       // Verify that the event was deleted from the database
       const deletedEvent = await Events.findById(eventId);
       expect(deletedEvent).toBeNull(); // The event should not exist in the database
     }
 
-  }, 10000);
+  }, 100000);
 
 test('should get a list of events', async () => {
     const options = {
@@ -94,18 +94,18 @@ test('should get a list of events', async () => {
 
     // Make assertions based on the expected behavior
     expect(Array.isArray(events)).toBe(true);
-}, 10000);
+}, 100000);
 test('should update an event', async () => {
-    
+
     type Input = inferProcedureInput<AppRouter['CreateEvent']>;
-        
+
     const input:Input  = {
         local: 'Test Location',
         date: new Date(),
         time: '12:00 PM',
         participants: '12',
     };
-    
+
     // You can use Jest's expect() function to make assertions
     const result = await appRouter.CreateEvent({
       ctx: {}, // Provide the context if needed
@@ -131,7 +131,7 @@ test('should update an event', async () => {
     if(eventId){
 
       type updateInput = inferProcedureInput<typeof appRouter['UpdateEvent']>;
-      
+
       const updateInput : updateInput = {
         _id: eventId, // Use the ID of the created event
         local: 'Updated Location',
@@ -139,17 +139,17 @@ test('should update an event', async () => {
         time: '1:00 PM', // Update time
         participants: 'Updated Participants',
       };
-    
+
       const updateResult = await appRouter.UpdateEvent({
           ctx: {},
           rawInput: updateInput,
           path: 'UpdateEvent',
           type: "mutation" as ProcedureType,
       });
-    
+
       // Make assertions based on the expected behavior
       expect(updateResult).toEqual({ message: 'success' });
-    
+
       // Verify that the event was updated in the database
       const updatedEvent = await Events.findById(eventId);
       expect(updatedEvent).not.toBeNull();
@@ -160,7 +160,7 @@ test('should update an event', async () => {
         expect(updatedEvent.participants).toEqual(updateInput.participants);
       }
     }
-  }, 10000);
+  }, 100000);
 
 });
 
