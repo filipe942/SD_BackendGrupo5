@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  #Os servicos do mongoDB
+  mongo_db:
+    container_name: mongo_db_container
+    image: mongo:latest
+    restart: always
+    ports:
+      - 2717:27017
+    volumes:
+      - mongo_db:/data/db
+
+  #Os servicos do node
+  api:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      PORT: 3000
+      MONGODB_URI: mongodb://mongo_db:27017
+      DB_NAME: my_db
+      NAME: SdProject
+    depends_on:
+      - mongo_db
+
+volumes:
+  mongo_db: {}

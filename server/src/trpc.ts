@@ -1,7 +1,7 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 import { z } from "zod";
 const t = initTRPC.create();
-import { Events } from "./models/Events.js";
+import { Events } from "./models/Events";
 
 export const appRouter = t.router({
   CreateEvent: t.procedure
@@ -14,7 +14,7 @@ export const appRouter = t.router({
       })
     )
     .mutation(async (req) => {
-      console.log(`Receido : ${JSON.stringify(req.input)}`);
+      console.log(`Recebido : ${JSON.stringify(req.input)}`);
       console.log(req.input.date);
       const event = new Events({
         local: req.input.local,
@@ -23,6 +23,12 @@ export const appRouter = t.router({
         participants: req.input.participants,
       });
       await event.save();
+      if(event._id){
+        return { message: "success" };
+      }
+      else{
+        return new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Error creating event" });
+      }
     }),
 
   GetEventList : t.procedure.query( async ()=>{
@@ -31,7 +37,7 @@ export const appRouter = t.router({
   }),
 
   UpdateEvent: t.procedure.input(z.object({
-    _id: z.string(),
+    _id: z.instanceof(Object).transform((id) => id.toString()),
     local: z.string(),
     date: z.coerce.date(),
     time: z.string(),
@@ -56,7 +62,7 @@ export const appRouter = t.router({
   }),
 
   DeleteEvent: t.procedure.input(z.object({
-    _id: z.string(),
+    _id: z.instanceof(Object).transform((id) => id.toString()),
   })).mutation(async (req) => {
     console.log(`Recebido : ${JSON.stringify(req.input)}`);
     try {

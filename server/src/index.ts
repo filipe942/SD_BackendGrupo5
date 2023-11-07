@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 mongoose.set("strictQuery", false);
 import cors from "cors";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { appRouter } from "./trpc.js";
+import { appRouter } from "./trpc";
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT;

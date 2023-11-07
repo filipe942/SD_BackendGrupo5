@@ -11,7 +11,7 @@
     "strict": true,
     "noImplicitAny": true,
     "useUnknownInCatchVariables": false,
-    "inlineSourceMap": true
+    "inlineSourceMap": true,
   },
   "lib": ["esnext"],
   "ts-node": {
