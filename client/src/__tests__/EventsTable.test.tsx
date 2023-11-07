@@ -3,6 +3,7 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import EventsTable from '../components/EventsTable';
 import "@testing-library/jest-dom";
 
+
 jest.mock('@trpc/client', () => {
   const originalModule = jest.requireActual('@trpc/client');
   return {
