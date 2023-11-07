@@ -13,6 +13,7 @@
   "dependencies": {
     "@trpc/client": "^10.43.1",
     "@trpc/server": "^10.43.1",
+    "@types/mongoose": "^5.11.97",
     "date-fns": "^2.30.0",
     "react": "^18.2.0",
     "react-datepicker": "^4.21.0",
