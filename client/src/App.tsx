@@ -4,6 +4,8 @@ import AddEvent from './pages/AddEvent';
 import ViewEvents from './pages/ViewEvents';
 import { Route, Routes } from "react-router-dom"
 
+/* test */
+
 function App() {
   return (
     <>
