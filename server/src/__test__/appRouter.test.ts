@@ -14,7 +14,7 @@ beforeEach(async () => {
   } catch (error) {
     console.log("Error connecting to MongoDB:", error);
   }
-},100000);
+},10000);
 
 afterEach(async () => {
   try {
@@ -22,7 +22,7 @@ afterEach(async () => {
   } catch (error) {
     console.log("Error closing MongoDB connection:", error);
   }
-},100000);
+},10000);
 describe('appRouter', () => {
 
     test('should create an event and then delete it', async () => {
@@ -81,7 +81,7 @@ describe('appRouter', () => {
       expect(deletedEvent).toBeNull(); // The event should not exist in the database
     }
 
-  }, 100000);
+  }, 10000);
 
 test('should get a list of events', async () => {
     const options = {
@@ -94,7 +94,7 @@ test('should get a list of events', async () => {
 
     // Make assertions based on the expected behavior
     expect(Array.isArray(events)).toBe(true);
-}, 100000);
+}, 10000);
 test('should update an event', async () => {
 
     type Input = inferProcedureInput<AppRouter['CreateEvent']>;
@@ -160,7 +160,7 @@ test('should update an event', async () => {
         expect(updatedEvent.participants).toEqual(updateInput.participants);
       }
     }
-  }, 100000);
+  }, 10000);
 
 });
 
