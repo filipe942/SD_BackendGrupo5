@@ -5,7 +5,7 @@ metadata:
   labels:
     app: sd-frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: sd-frontend
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: sd-frontend
-        image: tonig22/sd_client:18
+        image: tonig22/sd_client:20
         resources:
             limits:
               memory: 512Mi
@@ -25,4 +25,4 @@ spec:
               memory: 256Mi
               cpu: "0.2"
         ports:
-        - containerPort: 5173
+        - containerPort: 4173
