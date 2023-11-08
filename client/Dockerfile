@@ -5,7 +5,7 @@ FROM node:alpine
 WORKDIR /frontend
 
 # Copy the package.json and package-lock.json files
-COPY package.json package-lock.json ./
+COPY ["package.json", "package-lock.json*", "./"]
 
 # Install npm dependencies
 RUN npm install
@@ -13,9 +13,5 @@ RUN npm install
 # Copy the rest of your source code to the container
 COPY . .
 
-# Copy the start-up script into the container and make sure it's executable
-COPY start.sh .
-RUN chmod +x start.sh
-
-# Run the start-up script which will build and preview your app
-CMD ["./start.sh"]
+# Run development
+CMD ["npm", "run", "dev"]
