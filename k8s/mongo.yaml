@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: mongodb
-          image: mongo:4.4.6
+          image: mongo:6.0.4
           resources:
             limits:
               memory: 512Mi
@@ -29,11 +29,11 @@ spec:
           volumeMounts:
             - name: storage
               mountPath: /data/db
-      volumes: 
+      volumes:
         - name: storage
           persistentVolumeClaim:
             claimName: mongo-pvc
-            
+
 ---
 apiVersion: v1
 kind: Service

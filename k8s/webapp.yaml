@@ -5,7 +5,7 @@ metadata:
   labels:
     app: webapp
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: webapp
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: tonig22/sd_server:17
+          image: tonig22/sd_server:23
           resources:
             limits:
               memory: 512Mi
@@ -38,9 +38,12 @@ kind: Service
 metadata:
   name: webapp-service
 spec:
+  #  type: NodePort
+  type: LoadBalancer
   selector:
     app: webapp
   ports:
     - protocol: TCP
       port: 3000
       targetPort: 3000
+      nodePort: 30106
