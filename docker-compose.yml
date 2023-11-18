@@ -2,16 +2,17 @@ version: "3.9"
 
 services:
   client:
-    container_name: sd_frontend
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - '.:/frontend'
-      - 'node_modules:/frontend/node_modules'
+      - ".:/frontend"
+      - "node_modules:/frontend/node_modules"
     ports:
-      - '5173:5173'
+      - "5173"
     environment:
       - NODE_ENV=development
+    deploy:
+      replicas: 2
 volumes:
   node_modules: {}
