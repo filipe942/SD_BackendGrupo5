@@ -17,7 +17,8 @@ spec:
   syncPolicy:
     syncOptions:
     - CreateNamespace=true
-
+    - FailOnSharedResource=true
+    
     automated:
       selfHeal: true
       prune: true
