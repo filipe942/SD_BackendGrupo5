@@ -46,7 +46,7 @@ if (process.env.MONGODB_URI) {
   console.log("Error: URL undefined");
 }
 
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors());
 
 app.use("/trpc", createExpressMiddleware({ router: appRouter }));
 
