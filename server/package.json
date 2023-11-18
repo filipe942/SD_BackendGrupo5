@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@trpc/server": "^10.43.1",
+    "@trpc/server": "^10.43.3",
     "@types/dotenv": "^8.2.0",
     "@types/node": "^20.8.10",
     "cors": "^2.8.5",

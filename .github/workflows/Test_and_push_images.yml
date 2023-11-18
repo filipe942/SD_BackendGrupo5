@@ -28,8 +28,8 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./client
-          file: ./client/Dockerfile
+          context: ./
+          file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/sd_client:${{ github.run_number }}
 
